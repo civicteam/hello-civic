@@ -1,13 +1,21 @@
 <h1 align="center">
-  <img src="assets/hello.png"
-       alt="A dignified great dane in a suit and glasses, calmly smoking a pipe in front of a circuit-board backdrop—our security watchdog."
-       width="100%" />
+  <img src="assets/logo.svg"
+       alt="Hello Civic Logo"
+       width="200" />
 </h1>
 
 <p align="center">
   <b>Hello Civic</b><br/>
   <em>Secure Auth Recipes for Builders</em>
 </p>
+
+---
+
+<h1 align="center">
+  <img src="assets/hello.png"
+       alt="A dignified great dane in a suit and glasses, calmly smoking a pipe in front of a circuit-board backdrop—our security watchdog."
+       width="100%" />
+</h1>
 
 ---
 
@@ -39,7 +47,7 @@ cd hello-civic/hello-chat
 npm install
 npm run dev
 
-Browse to http://localhost:3000, try a message, and watch the watchdog demand a Civic login before divulging secrets. 🐶🔐
+Browse to http://localhost:3000 and try the voice chat demo. Note: Civic auth integration is planned for future implementation. 🐶🔐
 
 ⸻
 
@@ -50,14 +58,7 @@ Got a neat Civic auth demo? We'd love to see it! Open an issue or PR with:
 	2.	A runnable example in its own folder
 	3.	A README with setup instructions
 
-Even small improvements—bug fixes, better comments, UI polish—are welcome. See CONTRIBUTING.md for detailed guidelines.
-
-⸻
-
-🖼️ About the artwork
-
-The banner image lives at assets/hello.png.
-If you'd like a version with the repo title overlaid—or a square avatar for social previews—just say the word and I can generate a text-on-image variant.
+Even small improvements—bug fixes, better comments, UI polish—are welcome.
 
 ⸻
 

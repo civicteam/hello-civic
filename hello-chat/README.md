@@ -1,4 +1,15 @@
-# Hello Chat - Voice Chat Demo
+<h1 align="center">
+  <img src="../assets/hello.png"
+       alt="A dignified great dane in a suit and glasses, calmly smoking a pipe in front of a circuit-board backdrop—our security watchdog."
+       width="100%" />
+</h1>
+
+<p align="center">
+  <b>Hello Chat - Voice Chat Demo</b><br/>
+  <em>Secure Authentication Patterns for AI Voice Applications</em>
+</p>
+
+---
 
 A demo voice chat application showcasing secure authentication patterns for AI applications. Built with Next.js and OpenAI's Realtime API, this project demonstrates how to integrate civic-auth for secure voice interactions.
 
@@ -168,4 +179,4 @@ This is a demo project for the civic-auth cookbook. Feel free to:
 
 ## License
 
-MIT License
+MIT © 2025 Civic Team
