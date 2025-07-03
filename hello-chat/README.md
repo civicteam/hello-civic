@@ -69,7 +69,6 @@ This application serves as a **cookbook recipe** for implementing secure voice c
    Create a `.env.local` file in the root directory:
    ```env
    OPENAI_API_KEY=your-openai-api-key
-   CIVIC_AUTH_SECRET=your-civic-auth-secret
    ```
 
 3. **Get OpenAI API Key**
