@@ -21,6 +21,8 @@
 
 ### 👋 What is this?
 
+Maybe you want to add auth to your AI agent that trades memecoins? Or secure your voice chat bot before it spills company secrets?
+
 **Hello Civic** is a cookbook-style collection of miniature demos that show how to drop civic-auth, embedded wallets, and secure MCP into hackathon projects or production apps without breaking a sweat.
 
 ---
