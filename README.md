@@ -15,8 +15,6 @@
 
 **Hello Civic** is a cookbook-style collection of miniature demos that show how to drop civic-auth, embedded wallets, and secure MCP into hackathon projects or production apps without breaking a sweat.
 
-The great-dane mascot is our resident watchdog: calm, classy, and always on guard for sloppy auth.
-
 ---
 
 > **Note:** Hello Civic is an unofficial demo space from the DevEx team. Code here is experimental and may diverge from production branding.
@@ -47,12 +45,12 @@ Browse to http://localhost:3000, try a message, and watch the watchdog demand a 
 
 ✨ Contributing
 
-Got a neat Civic trick? Open an issue or PR with:
-	1.	A one-liner goal (“Secure FastAPI backend with Civic Pass”)
-	2.	A runnable example folder
-	3.	A short README explaining the flow
+Got a neat Civic auth demo? We'd love to see it! Open an issue or PR with:
+	1.	A clear goal ("Real-time chat with Civic Pass", "Mobile wallet integration")
+	2.	A runnable example in its own folder
+	3.	A README with setup instructions
 
-Even tiny fixes—spelling, linting, better comments—are appreciated. See CONTRIBUTING.md for ground rules.
+Even small improvements—bug fixes, better comments, UI polish—are welcome. See CONTRIBUTING.md for detailed guidelines.
 
 ⸻
 
