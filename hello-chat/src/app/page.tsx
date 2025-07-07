@@ -1,6 +1,9 @@
+import { UserButton } from "@civic/auth/react";
 import VoiceChat from "./components/VoiceChat";
+import { getUser } from "@civic/auth/nextjs";
 
-export default function Home() {
+export default async function Home() {
+  const user = await getUser();
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8">
       <div className="max-w-md w-full">
@@ -12,7 +15,8 @@ export default function Home() {
         </div>
         
         <div className="bg-white border-2 border-black rounded-lg p-8 shadow-lg">
-          <VoiceChat />
+          {user ? <VoiceChat /> : <div>Please login to continue</div>}
+          <UserButton />
         </div>
         
         <div className="mt-8 text-center">
