@@ -7,7 +7,7 @@ export default function Home() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-black mb-4">Hello Chat</h1>
           <p className="text-gray-600 text-lg">
-            Simple voice chat powered by Pipecat
+            Simple voice chat secured by Civic
           </p>
         </div>
         
