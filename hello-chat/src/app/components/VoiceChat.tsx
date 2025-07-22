@@ -11,6 +11,22 @@ export default function VoiceChat() {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isBotSpeaking, setIsBotSpeaking] = useState(false);
   const [transcript, setTranscript] = useState('');
+  const [ripples, setRipples] = useState<Array<{ id: number; delay: number }>>([]);
+
+  // Create ripple effect when speaking
+  useEffect(() => {
+    if (isBotSpeaking || isConnecting) {
+      const interval = setInterval(() => {
+        setRipples(prev => {
+          const newRipple = { id: Date.now(), delay: Math.random() * 0.5 };
+          return [...prev.slice(-2), newRipple]; // Keep only last 3 ripples
+        });
+      }, 800);
+      return () => clearInterval(interval);
+    } else {
+      setRipples([]);
+    }
+  }, [isBotSpeaking, isConnecting]);
 
   useEffect(() => {
     if (!client) return;
@@ -91,51 +107,173 @@ export default function VoiceChat() {
     client?.disconnect();
   };
 
+  const getStatusMessage = () => {
+    if (isConnecting) return 'Initializing...';
+    if (!isConnected) return 'Ready to chat';
+    if (isBotSpeaking) return 'AI is speaking';
+    return 'Listening...';
+  };
+
+  const getStatusColor = () => {
+    if (isConnecting) return 'bg-gradient-to-br from-yellow-400 to-orange-400';
+    if (!isConnected) return 'bg-gray-400';
+    if (isBotSpeaking) return 'bg-gradient-to-br from-purple-500 to-blue-500';
+    return 'bg-gradient-to-br from-green-400 to-emerald-500';
+  };
+
   return (
-    <div className="flex flex-col items-center space-y-6 max-w-2xl mx-auto">
+    <div className="flex flex-col items-center space-y-8">
+      {/* Enhanced Status Indicator with Ripples */}
       <div className="flex flex-col items-center space-y-4">
-        <div className="w-16 h-16 rounded-full border-2 border-black flex items-center justify-center">
-          <div className={`w-8 h-8 rounded-full ${
-            isConnected ? (isBotSpeaking ? 'bg-purple-500 animate-pulse' : 'bg-green-500') : 
-            'bg-gray-300'
-          }`} />
+        <div className="relative">
+          {/* Ripple Effects */}
+          {ripples.map((ripple) => (
+            <div
+              key={ripple.id}
+              className="absolute inset-0 rounded-full border-2 border-gray-300 animate-ping opacity-30"
+              style={{
+                animationDelay: `${ripple.delay}s`,
+                animationDuration: '2s'
+              }}
+            />
+          ))}
+          
+          {/* Main Status Circle */}
+          <div className="w-24 h-24 rounded-full border-2 border-gray-300 flex items-center justify-center bg-gray-50 relative overflow-hidden group cursor-pointer hover:scale-105 transition-transform duration-300">
+            {/* Background Animation */}
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            
+            {/* Status Indicator */}
+            <div className={`w-12 h-12 rounded-full transition-all duration-500 ${getStatusColor()} relative z-10 shadow-lg`}>
+              {/* Inner glow effect */}
+              {(isBotSpeaking || isConnecting) && (
+                <div className="absolute inset-0 rounded-full bg-white opacity-30 animate-pulse" />
+              )}
+              
+              {/* Voice bars when speaking */}
+              {isBotSpeaking && (
+                <div className="absolute inset-0 flex items-center justify-center space-x-0.5">
+                  <div className="voice-bar bg-white h-2"></div>
+                  <div className="voice-bar bg-white h-3"></div>
+                  <div className="voice-bar bg-white h-2"></div>
+                </div>
+              )}
+              
+              {/* Connecting dots */}
+              {isConnecting && (
+                <div className="absolute inset-0 flex items-center justify-center space-x-1">
+                  <div className="w-1 h-1 bg-white rounded-full animate-bounce"></div>
+                  <div className="w-1 h-1 bg-white rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                  <div className="w-1 h-1 bg-white rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
         
         <div className="text-center">
-          <h2 className="text-xl font-bold text-black mb-2">Cool Convo</h2>
-          <p className="text-gray-600 text-sm">
-            {isConnecting ? 'Connecting...' :
-             !isConnected ? 'Click to start conversation' :
-             isBotSpeaking ? 'AI is speaking...' : 
-             'Connected. Speak now!'}
+          <h2 className="text-xl font-bold text-black mb-1 tracking-tight">Voice Assistant</h2>
+          <p className={`text-sm transition-colors duration-300 ${
+            isConnected ? 'text-green-600' : 'text-gray-600'
+          }`}>
+            {getStatusMessage()}
           </p>
         </div>
       </div>
 
-      <button
-        onClick={isConnected ? handleDisconnect : handleConnect}
-        disabled={isConnecting || !client}
-        className="px-8 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed border-2 border-black"
-      >
-        {isConnecting ? 'Connecting...' : isConnected ? 'End Chat' : 'Start Chat'}
-      </button>
+      {/* Creative Connection Button */}
+      <div className="relative group">
+        <button
+          onClick={isConnected ? handleDisconnect : handleConnect}
+          disabled={isConnecting || !client}
+          className={`relative px-10 py-4 rounded-xl font-semibold transition-all duration-300 border-2 transform hover:scale-105 active:scale-95 ${
+            isConnected 
+              ? 'bg-white text-black border-black hover:bg-gray-50 hover:shadow-lg' 
+              : 'bg-black text-white border-black hover:bg-gray-800 hover:shadow-xl shadow-black/20'
+          } disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none`}
+        >
+          {/* Button glow effect */}
+          {!isConnected && !isConnecting && (
+            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-xl" />
+          )}
+          
+          <span className="relative z-10">
+            {isConnecting ? (
+              <span className="flex items-center space-x-3">
+                <div className="flex items-center space-x-1">
+                  <div className="voice-bar bg-white"></div>
+                  <div className="voice-bar bg-white"></div>
+                  <div className="voice-bar bg-white"></div>
+                  <div className="voice-bar bg-white"></div>
+                  <div className="voice-bar bg-white"></div>
+                </div>
+                <span>Connecting...</span>
+              </span>
+            ) : isConnected ? (
+              <span className="flex items-center space-x-2">
+                <span>End Chat</span>
+                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+              </span>
+            ) : (
+              <span className="flex items-center space-x-2">
+                <span>Start Chat</span>
+                <div className="w-2 h-2 bg-white rounded-full opacity-75"></div>
+              </span>
+            )}
+          </span>
+        </button>
+      </div>
 
-      {transcript && (
-        <div className="w-full max-w-lg bg-gray-50 border-2 border-gray-200 rounded-lg p-4">
-          <h3 className="font-semibold mb-2">Conversation:</h3>
-          <pre className="text-sm whitespace-pre-wrap text-gray-700 max-h-40 overflow-y-auto">
-            {transcript}
-          </pre>
-        </div>
-      )}
-
+      {/* Enhanced Connection Status */}
       {isConnected && (
-        <div className="text-center">
-          <p className="text-xs text-gray-400">
-            ✅ Secure Token-Based Connection
-          </p>
+        <div className="flex items-center space-x-3 text-xs">
+          <div className="flex items-center space-x-2 px-3 py-1 bg-green-50 border border-green-200 rounded-full">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-green-700 font-medium">Secure connection active</span>
+          </div>
         </div>
       )}
+
+      {/* Creative Conversation Display */}
+      {transcript && (
+        <div className="w-full bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 rounded-xl p-5 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-black text-sm flex items-center space-x-2">
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+              <span>Live Conversation</span>
+            </h3>
+            <button 
+              onClick={() => setTranscript('')}
+              className="text-xs text-gray-500 hover:text-gray-700 px-2 py-1 rounded-md hover:bg-gray-200 transition-colors"
+            >
+              ✕ Clear
+            </button>
+          </div>
+          <div className="text-sm text-gray-700 max-h-40 overflow-y-auto conversation-scroll">
+            <pre className="whitespace-pre-wrap leading-relaxed">
+              {transcript.split('\n').map((line, index) => {
+                if (line.startsWith('You: ')) {
+                  return (
+                    <div key={index} className="mb-2 p-2 bg-blue-50 rounded-lg border-l-3 border-blue-400">
+                      <span className="font-medium text-blue-700">You:</span>
+                      <span className="text-gray-700 ml-1">{line.slice(5)}</span>
+                    </div>
+                  );
+                } else if (line.startsWith('AI: ')) {
+                  return (
+                    <div key={index} className="mb-2 p-2 bg-purple-50 rounded-lg border-l-3 border-purple-400">
+                      <span className="font-medium text-purple-700">AI:</span>
+                      <span className="text-gray-700 ml-1">{line.slice(4)}</span>
+                    </div>
+                  );
+                }
+                return line && <div key={index} className="mb-1">{line}</div>;
+              })}
+            </pre>
+          </div>
+        </div>
+      )}
+
       <audio ref={audioRef} playsInline />
     </div>
   );
