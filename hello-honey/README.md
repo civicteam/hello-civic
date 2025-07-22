@@ -1,4 +1,10 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# hello-honey
+
+AI Character Generator with Solana NFT Minting
+
+![Hello Honey Character](./public/hello-honey-character.png)
+
+This is a [Next.js](https://nextjs.org) project that demonstrates AI-powered character generation with real Solana NFT minting capabilities.
 
 ## Getting Started
 

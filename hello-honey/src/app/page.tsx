@@ -2,102 +2,50 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-12 p-8 relative overflow-hidden">
+      {/* Brand Logo Mark */}
+      <div className="absolute top-8 left-8 w-12 h-12 bg-black rounded-full flex items-center justify-center">
+        <span className="text-white text-xl font-bold transform rotate-45">↗</span>
+      </div>
+      
+      {/* Main Brand Title */}
+      <div className="text-center space-y-4">
+        <h1 className="font-display-black text-8xl text-black tracking-tighter">
+          hello-honey
+        </h1>
+        <div className="w-24 h-2 bg-yellow-400 mx-auto"></div>
+        <p className="font-display text-xl text-black max-w-md">
+          AI Character Generator with Solana NFT Minting
+        </p>
+      </div>
+      
+      {/* Character Image with Frame */}
+      <div className="relative">
+        <div className="absolute -inset-4 bg-gradient-to-br from-pink-500 via-blue-500 to-green-500 rounded-2xl blur-sm opacity-75"></div>
+        <div className="relative bg-white p-4 rounded-2xl shadow-2xl">
+          <Image
+            src="/hello-honey-character.png"
+            alt="Hello Honey Character"
+            width={400}
+            height={400}
+            priority
+            className="max-w-full h-auto rounded-lg"
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+      
+      {/* Action Button */}
+      <button className="bg-black text-white px-12 py-4 font-display-bold text-lg hover:bg-gray-800 transition-all duration-200 transform hover:scale-105 shadow-lg">
+        Let's make an impact together.
+      </button>
+      
+      {/* Decorative Elements */}
+      <div className="absolute bottom-8 right-8 flex gap-4">
+        <div className="w-8 h-8 bg-yellow-400 rounded-full"></div>
+        <div className="w-8 h-8 bg-pink-500 rounded-full"></div>
+        <div className="w-8 h-8 bg-blue-500 rounded-full"></div>
+        <div className="w-8 h-8 bg-green-500 rounded-full"></div>
+      </div>
     </div>
   );
 }
