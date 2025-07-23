@@ -1,8 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useUser } from "@civic/auth-web3/react";
+import { userHasWallet } from "@civic/auth-web3";
 import WalletSection from "./WalletSection";
 import TraitSelector, { SelectedTraits } from "@/components/TraitSelector";
+import { createImageAttestation, getExplorerUrl, getAddressExplorerUrl } from "@/lib/civic-attestation";
+import type { AttestationResult } from "@/lib/civic-attestation";
 
 interface DashboardContentProps {
   userName: string;
@@ -11,6 +15,7 @@ interface DashboardContentProps {
 }
 
 export default function DashboardContent({ userName, userEmail, userId }: DashboardContentProps) {
+  const userContext = useUser();
   const [selectedTraits, setSelectedTraits] = useState<SelectedTraits>({
     personality: "",
     appearance: "",
@@ -20,6 +25,9 @@ export default function DashboardContent({ userName, userEmail, userId }: Dashbo
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedPrompt, setGeneratedPrompt] = useState("");
   const [generatedImage, setGeneratedImage] = useState("");
+  const [imageHash, setImageHash] = useState("");
+  const [attestationResult, setAttestationResult] = useState<AttestationResult | null>(null);
+  const [isCreatingAttestation, setIsCreatingAttestation] = useState(false);
 
   const handleTraitsChange = (traits: SelectedTraits) => {
     setSelectedTraits(traits);
@@ -27,6 +35,46 @@ export default function DashboardContent({ userName, userEmail, userId }: Dashbo
   };
 
   const allTraitsSelected = Object.values(selectedTraits).every(trait => trait !== "");
+
+  // Debug logging
+  console.log("User context:", userContext.user);
+  console.log("Has wallet:", userContext.user ? userHasWallet(userContext) : false);
+  console.log("Generated image exists:", !!generatedImage);
+
+  const handleCreateAttestation = async () => {
+    if (!generatedImage || !generatedPrompt || !userContext.user) {
+      return;
+    }
+
+    setIsCreatingAttestation(true);
+    try {
+      const traitsArray = Object.values(selectedTraits).filter(trait => trait);
+      const result = await createImageAttestation(
+        userContext,
+        generatedImage,
+        generatedPrompt,
+        traitsArray
+      );
+
+      setAttestationResult(result);
+
+      if (result.success) {
+        console.log('Attestation created successfully:', result.transactionSignature);
+      } else {
+        console.error('Failed to create attestation:', result.error);
+        alert(`Failed to create attestation: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Error creating attestation:', error);
+      alert('Failed to create attestation. Please try again.');
+      setAttestationResult({
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    } finally {
+      setIsCreatingAttestation(false);
+    }
+  };
 
   const handleGenerateCharacter = async () => {
     setIsGenerating(true);
@@ -48,8 +96,10 @@ export default function DashboardContent({ userName, userEmail, userId }: Dashbo
       const data = await response.json();
       setGeneratedPrompt(data.prompt);
       setGeneratedImage(data.image);
+      setImageHash(data.imageHash || "");
       console.log("Generated prompt:", data.prompt);
       console.log("Generated image:", data.image ? "Image generated successfully" : "No image");
+      console.log("Image hash:", data.imageHash);
     } catch (error) {
       console.error('Error generating character:', error);
       alert('Failed to generate character. Please try again.');
@@ -111,6 +161,118 @@ export default function DashboardContent({ userName, userEmail, userId }: Dashbo
                   alt="Generated Hello Honey character"
                   className="max-w-md rounded-lg shadow-lg"
                 />
+              </div>
+            </div>
+          )}
+
+          {imageHash && (
+            <div className="mb-6">
+              <h4 className="font-medium mb-2">Image Hash (SHA-256)</h4>
+              <p className="text-gray-600 mb-2 text-sm">
+                This hash can be used to verify the image on Solana devnet:
+              </p>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="text-sm text-gray-700 font-mono break-all">{imageHash}</p>
+              </div>
+              <button 
+                onClick={() => navigator.clipboard.writeText(imageHash)}
+                className="mt-2 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors text-sm"
+              >
+                Copy Hash to Clipboard
+              </button>
+            </div>
+          )}
+
+          {generatedImage && userContext.user && userHasWallet(userContext) && (
+            <div className="mb-6">
+              <h4 className="font-medium mb-2">Blockchain Attestation</h4>
+              <p className="text-gray-600 mb-4 text-sm">
+                Create a permanent, verifiable proof on Solana devnet that you generated this image:
+              </p>
+              
+              {!attestationResult && (
+                <button 
+                  onClick={handleCreateAttestation}
+                  disabled={isCreatingAttestation}
+                  className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                >
+                  {isCreatingAttestation ? (
+                    <span className="flex items-center gap-2">
+                      <span className="animate-spin">⏳</span>
+                      Creating Attestation...
+                    </span>
+                  ) : (
+                    'Create On-Chain Attestation'
+                  )}
+                </button>
+              )}
+
+              {attestationResult && (
+                <div className={`p-4 rounded-lg border ${
+                  attestationResult.success 
+                    ? 'bg-green-50 border-green-200' 
+                    : 'bg-red-50 border-red-200'
+                }`}>
+                  {attestationResult.success ? (
+                    <div>
+                      <p className="text-green-800 font-medium mb-2">✓ Attestation Created Successfully!</p>
+                      <div className="space-y-2 text-sm">
+                        <div>
+                          <p className="font-medium">Transaction Signature:</p>
+                          <p className="font-mono bg-white p-2 rounded break-all text-xs">
+                            {attestationResult.transactionSignature}
+                          </p>
+                          <a 
+                            href={getExplorerUrl(attestationResult.transactionSignature!)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:text-blue-800 text-xs"
+                          >
+                            View on Solana Explorer →
+                          </a>
+                        </div>
+                        {attestationResult.attestationPda && (
+                          <div className="mt-3">
+                            <p className="font-medium">Attestation Account:</p>
+                            <p className="font-mono bg-white p-2 rounded break-all text-xs">
+                              {attestationResult.attestationPda}
+                            </p>
+                            <a 
+                              href={getAddressExplorerUrl(attestationResult.attestationPda)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:text-blue-800 text-xs"
+                            >
+                              View Account on Explorer →
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <p className="text-red-800 font-medium mb-2">❌ Attestation Failed</p>
+                      <p className="text-red-700 text-sm">{attestationResult.error}</p>
+                      <button 
+                        onClick={() => setAttestationResult(null)}
+                        className="mt-2 text-blue-600 hover:text-blue-800 text-sm"
+                      >
+                        Try Again
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {generatedImage && userContext.user && !userHasWallet(userContext) && (
+            <div className="mb-6">
+              <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <p className="text-yellow-800 font-medium mb-2">⚠ Wallet Required</p>
+                <p className="text-yellow-700 text-sm">
+                  Create a Solana wallet above to enable blockchain attestation for your generated images.
+                </p>
               </div>
             </div>
           )}

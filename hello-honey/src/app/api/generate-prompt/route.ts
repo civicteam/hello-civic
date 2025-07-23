@@ -1,6 +1,7 @@
 import { generateText, experimental_generateImage as generateImage } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { NextResponse } from 'next/server';
+import { generateImageHash, generatePromptHash } from '@/lib/attestation';
 
 export async function POST(req: Request) {
   try {
@@ -37,9 +38,16 @@ export async function POST(req: Request) {
       size: '1024x1024',
     });
 
+    // Generate hashes for client-side attestation
+    const imageHash = generateImageHash(image.base64);
+    const promptHash = generatePromptHash(text);
+
     return NextResponse.json({ 
       prompt: text,
-      image: image.base64
+      image: image.base64,
+      imageHash,
+      promptHash,
+      traits
     });
   } catch (error) {
     console.error('Error generating prompt:', error);
