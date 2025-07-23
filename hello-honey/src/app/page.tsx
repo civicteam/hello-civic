@@ -1,11 +1,24 @@
+"use client";
+
 import Image from "next/image";
+import { useUser, UserButton } from "@civic/auth-web3/react";
+import Link from "next/link";
+import { useMemo } from "react";
 
 export default function Home() {
+  const { user } = useUser();
+  
+  const isLoggedIn = useMemo(() => !!user, [user]);
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-12 p-8 relative overflow-hidden">
       {/* Brand Logo Mark */}
       <div className="absolute top-8 left-8 w-12 h-12 bg-black rounded-full flex items-center justify-center">
         <span className="text-white text-xl font-bold transform rotate-45">↗</span>
+      </div>
+      
+      {/* User Button */}
+      <div className="absolute top-8 right-8">
+        <UserButton />
       </div>
       
       {/* Main Brand Title */}
@@ -34,10 +47,14 @@ export default function Home() {
         </div>
       </div>
       
-      {/* Action Button */}
-      <button className="bg-black text-white px-12 py-4 font-display-bold text-lg hover:bg-gray-800 transition-all duration-200 transform hover:scale-105 shadow-lg">
-        Let's make an impact together.
-      </button>
+      {/* Action Button - Only show when user is logged in */}
+      {isLoggedIn && (
+        <Link href="/dashboard">
+          <button className="bg-black text-white px-12 py-4 font-display-bold text-lg hover:bg-gray-800 transition-all duration-200 transform hover:scale-105 shadow-lg">
+            Go to Dashboard
+          </button>
+        </Link>
+      )}
       
       {/* Decorative Elements */}
       <div className="absolute bottom-8 right-8 flex gap-4">
