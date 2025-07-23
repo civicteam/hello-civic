@@ -29,20 +29,20 @@
 ## Tasks
 
 - [ ] 1.0 Project Setup and Dependencies
-  - [ ] 1.1 Install required dependencies (@solana/web3.js, openai, ipfs-http-client, etc.)
+  - [x] 1.1 Install required dependencies (@solana/web3.js, openai, ipfs-http-client, etc.) **(Partial - installed @civic/auth-web3)**
   - [ ] 1.2 Configure environment variables template
   - [ ] 1.3 Update package.json scripts if needed
   - [ ] 1.4 Create TypeScript type definitions file
 
-- [ ] 2.0 Authentication and Wallet Generation
-  - [ ] 2.1 Implement Solana wallet generation utility
-  - [ ] 2.2 Create wallet management context/state
-  - [ ] 2.3 Build login page with single login button
-  - [ ] 2.4 Implement login flow with wallet generation
+- [x] 2.0 Authentication and Wallet Generation
+  - [x] 2.1 Implement Solana wallet generation utility **(Using Civic Auth embedded wallets)**
+  - [x] 2.2 Create wallet management context/state **(Using CivicAuthProvider)**
+  - [x] 2.3 Build login page with single login button **(UserButton on homepage)**
+  - [x] 2.4 Implement login flow with wallet generation **(Complete with Civic Auth)**
 
 - [ ] 3.0 Dashboard and UI Components
-  - [ ] 3.1 Create dashboard page structure
-  - [ ] 3.2 Implement WalletInfo component with address display and copy functionality
+  - [x] 3.1 Create dashboard page structure
+  - [x] 3.2 Implement WalletInfo component with address display and copy functionality **(WalletSection component)**
   - [ ] 3.3 Build TraitSelector component with four dropdown menus
   - [ ] 3.4 Create CharacterDisplay component for showing generated content
   - [ ] 3.5 Implement dark theme styling throughout application
