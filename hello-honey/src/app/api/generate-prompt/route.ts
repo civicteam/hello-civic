@@ -1,4 +1,4 @@
-import { generateText } from 'ai';
+import { generateText, experimental_generateImage as generateImage } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { NextResponse } from 'next/server';
 
@@ -31,7 +31,16 @@ export async function POST(req: Request) {
       Format: Return only the image prompt, no explanations or metadata.`,
     });
 
-    return NextResponse.json({ prompt: text });
+    const { image } = await generateImage({
+      model: openai.image('dall-e-3'),
+      prompt: text,
+      size: '1024x1024',
+    });
+
+    return NextResponse.json({ 
+      prompt: text,
+      image: image.base64
+    });
   } catch (error) {
     console.error('Error generating prompt:', error);
     return NextResponse.json(

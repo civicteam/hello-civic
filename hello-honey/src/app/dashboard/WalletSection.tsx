@@ -50,7 +50,7 @@ export default function WalletSection() {
           <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
             <p className="text-yellow-800 font-medium mb-2">⚠ No Wallet Found</p>
             <p className="text-yellow-700 text-sm">
-              You don't have a Solana wallet yet. Create an embedded wallet to get started with Web3 features.
+              You don&apos;t have a Solana wallet yet. Create an embedded wallet to get started with Web3 features.
             </p>
           </div>
           
