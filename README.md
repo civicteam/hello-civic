@@ -34,20 +34,24 @@ Maybe you want to add auth to your AI agent that trades memecoins? Or secure you
 ### 📚 Recipes inside
 
 | Folder | Demo | What it teaches |
-|--------|------|-----------------|
-| `hello-chat/` | *Voice-based Conversational Agent* | Real-time voice chat with OpenAI using Pipecat and WebRTC |
+|---|---|---|
+| `hello-chat/` | *Voice-based Conversational Agent* | Secure, real-time voice chat with OpenAI using Civic-Auth. |
+| `hello-honey/` | *AI Character Generator* | AI-powered character generation with Solana NFT minting. |
 
-> The folder contains a self-contained README + `npm run dev` quick-start so you can copy-paste what you need and get started.
+> Each folder contains a self-contained README + `npm run dev` quick-start so you can copy-paste what you need and get started.
 
 ---
 
 ### 🚀 Quick start
 
+To get started with a recipe, browse to its folder and follow the instructions in its README file. For example:
+
 ```bash
 git clone https://github.com/civic-team/hello-civic
-cd hello-civic/hello-chat
+cd hello-civic/hello-chat 
 npm install
 npm run dev
+```
 
 Browse to http://localhost:3000 and try the voice chat demo. Note: Civic auth integration is planned for future implementation. 🐶🔐
 
