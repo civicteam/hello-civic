@@ -16,7 +16,7 @@
     "@pipecat-ai/client-react": "^0.4.1",
     "@pipecat-ai/openai-realtime-webrtc-transport": "latest",
     "geist": "^1.4.2",
-    "next": "15.3.4",
+    "next": "16.1.5",
     "openai": "^5.8.2",
     "react": "^19",
     "react-dom": "^19",
